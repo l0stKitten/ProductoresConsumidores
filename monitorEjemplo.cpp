@@ -13,6 +13,8 @@ class Monitor{
 			cont++;
 		}
 	}
+
+
 };
 
 class Hilo {
