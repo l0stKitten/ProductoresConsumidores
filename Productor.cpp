@@ -5,6 +5,7 @@
 #include<time.h>
 #include<unistd.h>
 #include<queue>
+#include<mutex>
 
 using namespace std;
 
@@ -16,20 +17,26 @@ void printQueue(queue<char> cola);
 
 //void productor (int nomPro);
 
+//mutex en para el buffer
+mutex flag;
+
 class Monitor {
 	public:
 		void addtoQueue (queue<char>* cola, int nomPro){
+			flag.lock();
 			//queue<char> cola = (queue<char> *) arg;
 			int numRandom;
 			for (int i = 1; true; i++){
 				//queue<char> cola = (queue<char> *)arg;
 				numRandom = rand() % 26;
 				char letra = letras[numRandom];
-				/*cola.push(letra);*/
+				cola -> push(letra);
 				printf ("(%d) Productor-%d estoy produciendo : %c \n", i, nomPro, letra);
-				/*printQueue(cola);*/
+				//printQueue(&cola);
+				cout << "Tamaño de la cola " << cola -> size() << endl;
 				sleep(1);
 			}
+			flag.unlock();
 		}
 };
 
@@ -93,6 +100,7 @@ int main(void){
 }
 
 void printQueue(queue<char> q){
+	//queue<char> q = &col;
 	while (!q.empty()){
 		cout << " " << q.front();
 		q.pop();
