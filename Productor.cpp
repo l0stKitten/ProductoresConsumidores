@@ -16,17 +16,13 @@ void printQueue(queue<char> cola);
 
 //void productor (int nomPro);
 
-class Productor {
-	private:
-		thread t;
-		int nomPro;
-		//queue<char> *cola;
-
-		//función que ejecuta el thread
-		void run_thread() {
-			//queue<char> cola = (queue<char> *)arg;
+class Monitor {
+	public:
+		void addtoQueue (queue<char>* cola, int nomPro){
+			//queue<char> cola = (queue<char> *) arg;
 			int numRandom;
 			for (int i = 1; true; i++){
+				//queue<char> cola = (queue<char> *)arg;
 				numRandom = rand() % 26;
 				char letra = letras[numRandom];
 				/*cola.push(letra);*/
@@ -35,10 +31,24 @@ class Productor {
 				sleep(1);
 			}
 		}
+};
+
+class Productor {
+	private:
+		Monitor* monitor;
+		thread t;
+		int nomPro;
+		queue<char>* cola;
+
+		//función que ejecuta el thread
+		void run_thread() {
+			monitor -> addtoQueue(cola, nomPro);
+		}
 	public:
-		Productor (int nom/*, queue<char> &buff*/){
+		Productor (int nom, queue<char>* buff, Monitor* mon){
 			nomPro = nom;
-			/*cola = buff;*/
+			cola = buff;
+			monitor = mon;
 			t = thread(&Productor::run_thread, this);
 		}
 
@@ -56,19 +66,22 @@ int main(void){
 	cin >> numProd;
 	cout << numProd << endl;
 	
-	//instanciamos la clase productor
+	//declaramos la clase productor
 	Productor* productores[numProd];
+
+	//declaramos la clase monitor
+	Monitor* mo;
 
 	//thread productores[numProd];
 
 	int i;
 	
 	//declaración de la cola
-	//queue<char> buffer;
+	queue<char> buffer;
 
 	//iniciamos los threads de los productores
 	for (i=0; i < numProd; i++){
-		productores[i] = new Productor(i/*, &buffer*/);
+		productores[i] = new Productor(i, &buffer, mo);
 	}
 
 	//establecemos que los threads se unan
