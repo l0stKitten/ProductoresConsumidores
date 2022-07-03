@@ -29,7 +29,7 @@ int eleConsu = 0;
 //función para imprimir los contador de consumo y producción
 void printContadores (int pro, int cons);
 
-class Monitor {
+class MonitorP {
 	public:
 		void addtoQueue (queue<char>* cola, int nomPro){
 
@@ -55,7 +55,10 @@ class Monitor {
 				flagP.unlock();
 			}
 		}
+};
 
+class MonitorC {
+	public:
 		void popofQueue (queue<char>* cola, int nomCon){
 
 			for (int i = 1; true; i++){
@@ -80,7 +83,7 @@ class Monitor {
 
 class Productor {
 	private:
-		Monitor* monitor;
+		MonitorP* monitor;
 		thread t;
 		int nomPro;
 		queue<char>* cola;
@@ -91,7 +94,7 @@ class Productor {
 		}
 
 	public:
-		Productor (int nom, queue<char>* buff, Monitor* mon){
+		Productor (int nom, queue<char>* buff, MonitorP* mon){
 			nomPro = nom;
 			cola = buff;
 			monitor = mon;
@@ -106,7 +109,7 @@ class Productor {
 
 class Consumidor {
 	private:
-		Monitor* monitor;
+		MonitorC* monitor;
 		thread t;
 		int nomCon;
 		queue<char> *cola;
@@ -117,7 +120,7 @@ class Consumidor {
 		}
 
 	public:
-		Consumidor (int nom, queue<char>* buff, Monitor* mon){
+		Consumidor (int nom, queue<char>* buff, MonitorC* mon){
 			nomCon = nom;
 			cola = buff;
 			monitor = mon;
@@ -151,7 +154,8 @@ int main(void) {
 	Productor* productores[numProd];
 	
 	//declaramos la clase monitor
-	Monitor* mo;
+	MonitorP* mo;
+	MonitorC* momo;
 
 	//declaración de la cola
 	queue<char> buffer;
@@ -165,7 +169,7 @@ int main(void) {
 
 	//iniciamos los threads de los consumidores
 	for (i=0; i < numCon; i++){
-		consumidores[i] = new Consumidor(i, &buffer, mo);
+		consumidores[i] = new Consumidor(i, &buffer, momo);
 	}
 
 	//establecemos que los threads se unan
