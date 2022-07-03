@@ -12,7 +12,7 @@ using namespace std;
 //letras a producir
 const char letras[26] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
-//mutex en para el buffer
+//mutex en para el buffer uno para consumidores otro para productores
 mutex flagP;
 
 mutex flagC;
