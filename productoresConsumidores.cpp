@@ -17,6 +17,8 @@ mutex flagP;
 
 mutex flagC;
 
+mutex print;
+
 //indicador de queue full
 #define queueFull 26
 
@@ -26,8 +28,17 @@ int eleProdu = 0;
 //contador de elementos consumidos
 int eleConsu = 0;
 
+//contador de desperdicio cuando no hay espacio en el buffer por productor
+int desperdicioB [] = {0, 0, 0, 0, 0};
+
+//contador de desperdicio cuando está vacío el buffer
+int desperdicioV []= {0, 0, 0, 0, 0};
+
 //función para imprimir los contador de consumo y producción
 void printContadores (int pro, int cons);
+
+//función para imprimir los desperdicios
+void printDesperdicio (int nombre, bool proOcon);
 
 class Monitor {
 	public:
@@ -49,7 +60,9 @@ class Monitor {
 
 					sleep(1);
 				} else {
+					desperdicioB[nomPro] += 1;
 					cout << "--------- Buffer lleno ---------" << endl;
+					printDesperdicio(nomPro, false);
 					sleep(1);
 				}
 				flagP.unlock();
@@ -69,7 +82,9 @@ class Monitor {
 					printContadores(eleProdu, eleConsu);
 					sleep(1);
 				} else {
+					desperdicioV[nomCon] += 1;
 					cout << "+++++++++++ No hay productos +++++++++++" << endl;
+					printDesperdicio(nomCon, true);
 					sleep(1);
 				}
 				flagC.unlock();
@@ -181,8 +196,22 @@ int main(void) {
 }
 
 void printContadores (int pro, int cons){
+	//print.lock();
 	cout << "	--------------------------------" << endl;
 	cout << "	    producción: " << pro << endl;
 	cout << "	    consumo: " << cons << endl;
 	cout << "	--------------------------------" << endl;
+	//print.unlock();
+}
+
+void printDesperdicio (int nombre, bool proOcon){
+	if (proOcon == false){
+		cout << "\n+---------------------------+" << endl;
+		cout << "  despercidio Prod. " << nombre << ": " << desperdicioB[nombre] << endl;
+		cout << "+---------------------------+\n" << endl;
+	} else {
+		cout << "\n+---------------------------+" << endl;
+		cout << "  despercidio Cons. " << nombre << ": " << desperdicioV[nombre] << endl;
+		cout << "+---------------------------+\n" << endl;
+	}
 }
