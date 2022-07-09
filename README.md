@@ -153,23 +153,29 @@ MonitorBuffer::MonitorBuffer(int full){
 void MonitorBuffer::addtoQueue (int nomPro){      
   for (int i = 1; true; i++){
     unique_lock<mutex> unique_lock(flag);
-        
     //Produce porque la hemos bloqueado con el flag.
     if (buffer.size() == queueFull){
       bufferListoP = false;
     }
         
-    if (!bufferListoP){
+    /*if (!bufferListoP || buffer.size() == queueFull){
       desperdicioB[nomPro] += 1;
       cout << "+++++++++++ No hay espacio +++++++++++" << endl;
       printDesperdicio(nomPro, false);
-      sleep(1);
       notFull.wait(unique_lock);
-    }
+    }*/
+
+    notFull.wait(unique_lock, [this] (){
+      desperdicioB += 1;
+      cout << "+++++++++++ No hay espacio +++++++++++" << endl;
+      printDesperdicio(false);
+      return bufferListoP != false;
+    });
         
 		int numRandom = rand() % 26;
 		char letra = letras[numRandom];
 		buffer.push(letra);
+    bufferListoC = true;
 		printf ("(%d) Productor-%d estoy produciendo : %c \n", i, nomPro, letra);
 		cout << "\nTamaño de la cola " << buffer.size() << endl;
 		eleProdu += 1;
@@ -185,18 +191,24 @@ void MonitorBuffer::addtoQueue (int nomPro){
 void MonitorBuffer::popofQueue (int nomCon){
   for (int i = 1; true; i++){
 		unique_lock<mutex> unique_lock(flag);
-
     //Consume porque la hemos bloqueado con el flag.
     if (buffer.size() == 0){
       bufferListoC = false;
     }
-    if (!bufferListoC){
+    
+    /*if (!bufferListoC || buffer.size() == 0){
       desperdicioV[nomCon] += 1;
       cout << "+++++++++++ No hay productos +++++++++++" << endl;
 	  	printDesperdicio(nomCon, true);
-      sleep(1);
       notEmpty.wait(unique_lock);
-    }
+    }*/
+
+    notEmpty.wait(unique_lock, [this](){
+      desperdicioV += 1;
+      cout << "+++++++++++ No hay productos +++++++++++" << endl;
+	  	printDesperdicio(true);
+      return bufferListoC != false;
+    });
 
     printf ("(%d) Consumidor-%d estoy consumiendo : %c \n", i, nomCon, buffer.front());
 		buffer.pop();
@@ -219,14 +231,14 @@ void MonitorBuffer::printContadores (int pro, int cons){
 	cout << "	--------------------------------" << endl;
 }
 
-void MonitorBuffer::printDesperdicio (int nombre, bool proOcon){
+void MonitorBuffer::printDesperdicio (bool proOcon){
 	if (proOcon == false){
 		cout << "\n+---------------------------+" << endl;
-		cout << "  despercidio Prod. " << nombre << ": " << desperdicioB[nombre] << endl;
+		cout << "  despercidio Prod. "  << desperdicioB << endl;
 		cout << "+---------------------------+\n" << endl;
 	} else {
 		cout << "\n+---------------------------+" << endl;
-		cout << "  despercidio Cons. " << nombre << ": " << desperdicioV[nombre] << endl;
+		cout << "  despercidio Cons. "  << desperdicioV << endl;
 		cout << "+---------------------------+\n" << endl;
 	}
 }
