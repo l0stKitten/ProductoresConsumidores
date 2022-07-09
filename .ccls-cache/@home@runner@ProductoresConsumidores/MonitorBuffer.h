@@ -26,9 +26,9 @@ class MonitorBuffer {
 
     //contador de desperdicio cuando no hay espacio 
     //en el buffer por productor
-    int desperdicioB [5] = {0, 0, 0, 0, 0}; 
+    int desperdicioB = 0; 
     //contador de desperdicio cuando está vacío el buffer
-    int desperdicioV [5] = {0, 0, 0, 0, 0};
+    int desperdicioV = 0;
 
     //Elementos producidos
     int eleProdu;
@@ -37,6 +37,9 @@ class MonitorBuffer {
 
     //Cantidad Máxima de Buffer
     int queueFull;
+
+    //buffersize
+    //int bufferSize = 0;
 
   public:
     void addtoQueue (int nomPro);
@@ -47,7 +50,7 @@ class MonitorBuffer {
     void printContadores (int pro, int cons);
     
     //función para imprimir los desperdicios
-    void printDesperdicio (int nombre, bool proOcon);
+    void printDesperdicio (bool proOcon);
     
 };
 #endif
