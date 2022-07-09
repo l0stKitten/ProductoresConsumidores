@@ -1,5 +1,6 @@
 # ProductoresConsumidores
 
+
 -	El productor intenta insertar datos en una ranura vacía del buffer. 
 -	El consumidor intenta eliminar datos de una ranura llena del buffer. 
 -	El Productor no debe insertar datos cuando el buffer está lleno. 
@@ -430,10 +431,6 @@ int main(void) {
 }
 ```
 
-#### Caso 1:
-Según el caso 1 estos son los resultados cuando tenemos 3 consumidores, 1 productor y el tamaño del buffer es igual a 5.
-
-
 ### Interfaz Gráfica
 Con el código previo según POO podemos pasarlo a interfaz gráfica con QT, esto permitirá evidenciar el comportamiento de los hilos de forma más interactiva. El principal reto para QT es adaptar las librerías que usamos a las del formato de QT dado que esta cuenta con sus propias librerías para hilos, colas y variables condicionales. Esto supone un cambio en el código, pero no muy sustancial.
 QT es el framework más conocido para poder diseñar e implementar GUI en C++. También permite trabajar por consola, está más orientado a objetos. Cuenta con una gran variedad de widgets y documentación.
@@ -552,9 +549,6 @@ void Dialog::on_pushButton_8_clicked()
 #### Problemas encontrados
 El principal problema por el que no se pudo continuar con la implementación se debe al uso de señales en Qt, generalmente se pueden emitir los datos desde el thread pero no fue posible dado que la implementación del thread forma parte del Monitor. Por lo tanto, se requería la instancia del thread en el monitor, tuve algunas ideas para implementar como pasar la referencia del hilo en sus respectivos procedimientos sin embargo el tiempo jugó en contra. Por ello los resultados del caso 2 estarán en el modo consola y la implementación gráfica quedó a medias.
 
-#### Caso 2 (Modo Consola):
-En este caso veremos el funcionamiento del programa anterior dado que completamos la interfaz gráfica en modo consola, con
-
 ## Conclusiones
 -	El problema de productores consumidores aplicando monitores nos permite aprender y evidenciar cómo se puede sincronizar y modelar el comportamiento de diferentes hilos.
 -	El uso de exclusión mutua puede ser complementado con el uso de condiciones variables que permiten la comunicación entre los hilos. Esto optimiza el funcionamiento porque a través de este permitimos que por detrás los hilos se ordenen como en una cola.
@@ -569,7 +563,7 @@ En este caso veremos el funcionamiento del programa anterior dado que completamo
 - ¿Se puede usar QT con Pyhton?
 
 ## Video
-
+https://youtu.be/ZNlo6MJR180
 
 ## Referencias
 1.	https://www.youtube.com/watch?v=Qx3P2wazwI0&t=396s
