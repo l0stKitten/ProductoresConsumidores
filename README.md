@@ -1,5 +1,5 @@
 # ProductoresConsumidores
-
+![alt text](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/21690602-c77c-4975-9aba-bb6d5266af97/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220709%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220709T053529Z&X-Amz-Expires=86400&X-Amz-Signature=75b92260ec3f7881976b0edb6522524f4420b2f590e2f6309c0a4408cb8be73d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%222.png%22&x-id=GetObject)
 
 -	El productor intenta insertar datos en una ranura vacía del buffer. 
 -	El consumidor intenta eliminar datos de una ranura llena del buffer. 
